@@ -1,0 +1,130 @@
+.moderation-page {
+  padding: 40px;
+  max-width: 800px;
+}
+
+.moderation-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.threshold-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.threshold-grid .form-input {
+  max-width: 120px;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.threshold-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.flow-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.flow-badge--warn {
+  background: rgba(240, 178, 50, 0.15);
+  color: var(--warning);
+}
+
+.flow-badge--timeout {
+  background: rgba(88, 101, 242, 0.15);
+  color: var(--accent);
+}
+
+.flow-badge--ban {
+  background: rgba(242, 63, 66, 0.15);
+  color: var(--danger);
+}
+
+.flow-pts {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-secondary);
+}
+
+.flow-arrow {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.automod-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.automod-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.automod-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.automod-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.automod-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}

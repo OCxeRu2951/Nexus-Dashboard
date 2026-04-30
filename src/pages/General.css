@@ -1,0 +1,20 @@
+.general-page {
+  padding: 40px;
+  max-width: 640px;
+}
+
+.number-input-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.number-input {
+  max-width: 160px;
+}
+
+.save-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}

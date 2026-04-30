@@ -1,0 +1,10 @@
+.channel-select-loading {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+}
+
+.channel-select {
+    appearance: none;
+    cursor: pointer;
+}

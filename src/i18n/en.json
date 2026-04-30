@@ -1,0 +1,81 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Saved successfully",
+    "confirm": "Confirm",
+    "back": "Back",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "none": "None"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "general": "General",
+    "hourly": "Hourly",
+    "moderation": "Moderation",
+    "logout": "Logout",
+    "Apply": "Application System"
+  },
+  "login": {
+    "title": "Nexus Dashboard",
+    "subtitle": "Login with Discord to manage your servers",
+    "button": "Login with Discord",
+    "description": "Nexus is an all-in-one utility bot. Login to customize your server."
+  },
+  "servers": {
+    "title": "Select Server",
+    "subtitle": "Choose a server to manage",
+    "noServers": "No servers with Nexus installed",
+    "manage": "Manage"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "stats": {
+      "members": "Members",
+      "commands": "Commands Used",
+      "warnings": "Warnings",
+      "polls": "Polls"
+    }
+  },
+  "general": {
+    "title": "General Settings",
+    "afkHours": "AFK Auto-clear Hours",
+    "pollDays": "Poll Data Retention (days)",
+    "warningsDays": "Warning Data Retention (days)",
+    "applicationDays": "Application Data Retention (days)"
+  },
+  "hourly": {
+    "title": "Hourly Announcement",
+    "channel": "Announcement Channel",
+    "channelPlaceholder": "Enter channel ID",
+    "messages": "Messages by Hour",
+    "hour": "Hour",
+    "content": "Message Content",
+    "imageUrl": "Image URL",
+    "embedTitle": "Embed Title",
+    "embedDescription": "Embed Description",
+    "embedColor": "Embed Color",
+    "default": "Default",
+    "addMessage": "Add Message",
+    "preview": "Preview"
+  },
+  "moderation": {
+    "title": "Moderation Settings",
+    "logChannel": "Log Channel",
+    "logChannelPlaceholder": "Enter channel ID",
+    "warnThreshold": "Warning Thresholds",
+    "timeoutAt": "Timeout at points",
+    "banAt": "Ban at points",
+    "timeoutDuration": "Auto-timeout duration (minutes)",
+    "automod": "Auto Moderation",
+    "automodSpam": "Spam Detection",
+    "automodInvite": "Invite Link Detection"
+  }
+}

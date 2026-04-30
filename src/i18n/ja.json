@@ -1,0 +1,81 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "add": "追加",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "success": "保存しました",
+    "confirm": "確認",
+    "back": "戻る",
+    "enabled": "有効",
+    "disabled": "無効",
+    "none": "なし"
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "general": "一般設定",
+    "hourly": "時報設定",
+    "moderation": "モデレーション",
+    "logout": "ログアウト",
+    "Apply": "申請システム"
+  },
+  "login": {
+    "title": "Nexus Dashboard",
+    "subtitle": "Discordアカウントでログインしてサーバーを管理",
+    "button": "Discordでログイン",
+    "description": "NexusはオールインワンのユーティリティBot。ログインしてサーバーをカスタマイズしましょう。"
+  },
+  "servers": {
+    "title": "サーバーを選択",
+    "subtitle": "管理するサーバーを選んでください",
+    "noServers": "Botが導入されているサーバーがありません",
+    "manage": "管理する"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "welcome": "ようこそ",
+    "stats": {
+      "members": "メンバー数",
+      "commands": "コマンド使用数",
+      "warnings": "警告数",
+      "polls": "投票数"
+    }
+  },
+  "general": {
+    "title": "一般設定",
+    "afkHours": "AFK自動解除時間（時間）",
+    "pollDays": "投票データ保持日数",
+    "warningsDays": "警告データ保持日数",
+    "applicationDays": "申請データ保持日数"
+  },
+  "hourly": {
+    "title": "時報設定",
+    "channel": "時報チャンネル",
+    "channelPlaceholder": "チャンネルIDを入力",
+    "messages": "時間別メッセージ",
+    "hour": "時",
+    "content": "メッセージ内容",
+    "imageUrl": "画像URL",
+    "embedTitle": "Embedタイトル",
+    "embedDescription": "Embed説明文",
+    "embedColor": "Embedカラー",
+    "default": "デフォルト",
+    "addMessage": "メッセージを追加",
+    "preview": "プレビュー"
+  },
+  "moderation": {
+    "title": "モデレーション設定",
+    "logChannel": "ログチャンネル",
+    "logChannelPlaceholder": "チャンネルIDを入力",
+    "warnThreshold": "警告しきい値",
+    "timeoutAt": "タイムアウトするポイント数",
+    "banAt": "BANするポイント数",
+    "timeoutDuration": "自動タイムアウト時間（分）",
+    "automod": "自動モデレーション",
+    "automodSpam": "スパム検知",
+    "automodInvite": "招待リンク検知"
+  }
+}

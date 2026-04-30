@@ -1,0 +1,9 @@
+# ローカル開発用の環境変数
+# .dev.vars にコピーして実際の値を入力する（Gitには含めない）
+
+DISCORD_CLIENT_ID=your_client_id
+DISCORD_CLIENT_SECRET=your_client_secret
+DISCORD_BOT_TOKEN=your_bot_token
+TURSO_URL=libsql://your-db.turso.io
+TURSO_AUTH_TOKEN=your_turso_token
+DASHBOARD_URL=http://localhost:5173
