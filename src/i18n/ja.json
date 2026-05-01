@@ -15,12 +15,11 @@
     "none": "なし"
   },
   "nav": {
-    "dashboard": "ダッシュボード",
-    "general": "一般設定",
-    "hourly": "時報設定",
-    "moderation": "モデレーション",
-    "logout": "ログアウト",
-    "Apply": "申請システム"
+  "dashboard": "ダッシュボード",
+  "general": "一般設定",
+  "hourly": "時報設定",
+  "moderation": "モデレーション",
+  "apply": "申請システム"
   },
   "login": {
     "title": "Nexus Dashboard",

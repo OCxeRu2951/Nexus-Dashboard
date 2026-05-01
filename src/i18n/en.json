@@ -20,7 +20,7 @@
     "hourly": "Hourly",
     "moderation": "Moderation",
     "logout": "Logout",
-    "Apply": "Application System"
+    "apply": "Application System"
   },
   "login": {
     "title": "Nexus Dashboard",
