@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,4 +33,3 @@ jobs:
           projectName: nexus-dashboard
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          
