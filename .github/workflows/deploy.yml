@@ -29,3 +29,4 @@ jobs:
           projectName: nexus-dashboard
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
