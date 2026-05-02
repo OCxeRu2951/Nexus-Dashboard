@@ -3,7 +3,7 @@ import { getDb } from "../_utils/db.js";
 
 export async function onRequest(ctx) {
   const { request, env } = ctx;
-  const session = await verifyGuildAccess(request, env, params.guildId);
+  const session = await getSession(request, env);
   if (!session) return unauthorized();
 
   // ユーザーのギルド一覧をDiscord APIから取得
