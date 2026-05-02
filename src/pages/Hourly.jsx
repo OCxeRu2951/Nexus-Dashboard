@@ -14,7 +14,7 @@ const EMPTY_MESSAGE = {
 };
 
 export default function Hourly() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { guildId } = useParams();
   const [channelId, setChannelId] = useState("");
   const [messages, setMessages] = useState({});
