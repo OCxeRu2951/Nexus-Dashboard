@@ -18,8 +18,7 @@ export default function Dashboard() {
   }, [guildId]);
 
   const statCards = [
-    {
-      key: "members",
+    { key: "members",
       icon: "👥",
       value: stats?.members ?? 0,
       color: "#5865f2",
