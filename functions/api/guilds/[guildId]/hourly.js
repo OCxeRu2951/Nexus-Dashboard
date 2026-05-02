@@ -38,14 +38,14 @@ export async function onRequest(ctx) {
     });
   }
 
-  if (request.method === 'PUT') {
+  if (request.method === "PUT") {
     const body = await request.json();
     const { channel_id, messages } = body;
 
     // チャンネルIDを更新
     await db.execute({
       sql: `INSERT INTO settings (guild_id, hourly_channel_id) VALUES (?, ?)
-            ON CONFLICT(guild_id) DO UPDATE SET hourly_channel_id = ?`,
+          ON CONFLICT(guild_id) DO UPDATE SET hourly_channel_id = ?`,
       args: [guildId, channel_id || null, channel_id || null],
     });
 
@@ -55,13 +55,16 @@ export async function onRequest(ctx) {
       args: [guildId],
     });
 
-    for (const [key, msg] of Object.entries(messages)) {
-      const hour = key === 'default' ? -1 : parseInt(key, 10);
-      if (isNaN(hour) && key !== 'default') continue;
+    for (const [key, msg] of Object.entries(messages ?? {})) {
+      const hour = key === "default" ? -1 : parseInt(key, 10);
+      if (key !== "default" && isNaN(hour)) continue;
+
+      // 空メッセージはスキップ
+      if (!msg.content && !msg.image && !msg.file_url && !msg.embed) continue;
 
       await db.execute({
-        sql: `INSERT INTO hourly_messages (guild_id, hour, content, image_url, embed, enabled)
-              VALUES (?, ?, ?, ?, ?, 1)`,
+        sql: `INSERT INTO hourly_messages (guild_id, hour, content, image_url, file_url, embed, enabled)
+            VALUES (?, ?, ?, ?, ?, ?, 1)`,
         args: [
           guildId,
           hour,
