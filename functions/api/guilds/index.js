@@ -15,19 +15,23 @@ export async function onRequest(ctx) {
   const allGuilds = await guildsRes.json();
 
   // 管理権限のあるギルドのみ
-  const manageable = allGuilds.filter(g =>
-    (BigInt(g.permissions) & BigInt(0x20)) === BigInt(0x20) // MANAGE_GUILD
+  const botGuilds = manageable.filter((g) => botGuildIds.has(g.id));
+
+  // approximate_member_countを取得するため詳細情報を追加取得
+  const botGuildsWithCount = await Promise.all(
+    botGuilds.map(async (g) => {
+      const res = await fetch(
+        `https://discord.com/api/guilds/${g.id}?with_counts=true`,
+        { headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` } },
+      );
+      if (!res.ok) return g;
+      const detail = await res.json();
+      return {
+        ...g,
+        approximate_member_count: detail.approximate_member_count,
+      };
+    }),
   );
 
-  // BotがインストールされているギルドをDBで確認
-  const db = getDb(env);
-  const { rows } = await db.execute(
-    `SELECT guild_id FROM settings WHERE guild_id IN (${manageable.map(() => '?').join(',')})`,
-    manageable.map(g => g.id)
-  ).catch(() => ({ rows: [] }));
-
-  const botGuildIds = new Set(rows.map(r => r.guild_id));
-  const botGuilds = manageable.filter(g => botGuildIds.has(g.id));
-
-  return json(botGuilds);
+  return json(botGuildsWithCount);
 }

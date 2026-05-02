@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import api from '../lib/api';
-import './Hourly.css';
+import ChannelSelect from "../components/ChannelSelect.jsx";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import api from "../lib/api";
+import "./Hourly.css";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 const EMPTY_MESSAGE = {
-  content: '',
-  image: '',
+  content: "",
+  image: "",
   embed: null,
 };
 
 export default function Hourly() {
   const { t } = useTranslation();
   const { guildId } = useParams();
-  const [channelId, setChannelId] = useState('');
+  const [channelId, setChannelId] = useState("");
   const [messages, setMessages] = useState({});
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,9 +25,10 @@ export default function Hourly() {
   const [useEmbed, setUseEmbed] = useState(false);
 
   useEffect(() => {
-    api.get(`/guilds/${guildId}/hourly`)
-      .then(res => {
-        setChannelId(res.data.channel_id ?? '');
+    api
+      .get(`/guilds/${guildId}/hourly`)
+      .then((res) => {
+        setChannelId(res.data.channel_id ?? "");
         setMessages(res.data.messages ?? {});
       })
       .catch(console.error)
@@ -34,16 +36,17 @@ export default function Hourly() {
   }, [guildId]);
 
   const handleSelectHour = (hour) => {
-    const key = hour === 'default' ? 'default' : String(hour);
+    const key = hour === "default" ? "default" : String(hour);
     setSelected(key);
     const msg = messages[key] ?? { ...EMPTY_MESSAGE };
     setUseEmbed(!!msg.embed);
   };
 
-  const currentMsg = selected !== null ? (messages[selected] ?? { ...EMPTY_MESSAGE }) : null;
+  const currentMsg =
+    selected !== null ? (messages[selected] ?? { ...EMPTY_MESSAGE }) : null;
 
   const updateCurrentMsg = (field, value) => {
-    setMessages(prev => ({
+    setMessages((prev) => ({
       ...prev,
       [selected]: {
         ...(prev[selected] ?? EMPTY_MESSAGE),
@@ -53,7 +56,7 @@ export default function Hourly() {
   };
 
   const updateEmbed = (field, value) => {
-    setMessages(prev => ({
+    setMessages((prev) => ({
       ...prev,
       [selected]: {
         ...(prev[selected] ?? EMPTY_MESSAGE),
@@ -68,7 +71,7 @@ export default function Hourly() {
   const toggleEmbed = (val) => {
     setUseEmbed(val);
     if (!val) {
-      setMessages(prev => ({
+      setMessages((prev) => ({
         ...prev,
         [selected]: {
           ...(prev[selected] ?? EMPTY_MESSAGE),
@@ -76,18 +79,18 @@ export default function Hourly() {
         },
       }));
     } else {
-      setMessages(prev => ({
+      setMessages((prev) => ({
         ...prev,
         [selected]: {
           ...(prev[selected] ?? EMPTY_MESSAGE),
-          embed: { title: '', description: '', color: '#5865f2' },
+          embed: { title: "", description: "", color: "#5865f2" },
         },
       }));
     }
   };
 
   const deleteMessage = () => {
-    setMessages(prev => {
+    setMessages((prev) => {
       const next = { ...prev };
       delete next[selected];
       return next;

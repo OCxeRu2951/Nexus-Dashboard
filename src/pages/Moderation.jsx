@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import api from '../lib/api';
-import './Moderation.css';
+import ChannelSelect from "../components/ChannelSelect.jsx";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import api from "../lib/api";
+import "./Moderation.css";
 
 const DEFAULTS = {
-  log_channel_id: '',
+  log_channel_id: "",
   warn_threshold_timeout: 3,
   warn_threshold_ban: 5,
   timeout_duration_min: 60,
@@ -22,13 +23,14 @@ export default function Moderation() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    api.get(`/guilds/${guildId}/moderation`)
-      .then(res => setSettings({ ...DEFAULTS, ...res.data }))
+    api
+      .get(`/guilds/${guildId}/moderation`)
+      .then((res) => setSettings({ ...DEFAULTS, ...res.data }))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [guildId]);
 
-  const update = (key, val) => setSettings(prev => ({ ...prev, [key]: val }));
+  const update = (key, val) => setSettings((prev) => ({ ...prev, [key]: val }));
 
   const handleSave = async () => {
     setSaving(true);

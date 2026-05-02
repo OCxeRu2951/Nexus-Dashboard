@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import api from '../lib/api';
 import './Dashboard.css';
@@ -18,9 +18,23 @@ export default function Dashboard() {
   }, [guildId]);
 
   const statCards = [
-    { key: 'members', icon: '👥', value: stats?.members ?? 0, color: '#5865f2' },
-    { key: 'warnings', icon: '⚠️', value: stats?.warnings ?? 0, color: '#f0b232' },
-    { key: 'polls', icon: '📊', value: stats?.polls ?? 0, color: '#23a55a' },
+    {
+      key: "members",
+      icon: "👥",
+      value: stats?.members ?? 0,
+      color: "#5865f2",
+    },
+    {
+      key: "warnings",
+      icon: "⚠️",
+      value: stats?.warnings ?? 0,
+      color: "#f0b232",
+    },
+    { key: "polls",
+      icon: "📊",
+      value: stats?.polls ?? 0,
+      color: "#23a55a"
+    },
   ];
 
   return (
