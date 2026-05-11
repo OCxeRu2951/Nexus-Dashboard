@@ -72,6 +72,17 @@ export default function Dashboard() {
 
       <div className="dashboard-cards">
         <div className="card">
+          <h3 className="card-title">⚙️ 一般設定</h3>
+          <p className="card-desc">AFK時間やデータ保持期間を設定します</p>
+          <Link
+            to={`/dashboard/${guildId}/general`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
+            設定する →
+          </Link>
+        </div>
+        <div className="card">
           <h3 className="card-title">🕐 時報設定</h3>
           <p className="card-desc">
             時間ごとのアナウンスメッセージを設定します
@@ -89,17 +100,6 @@ export default function Dashboard() {
           <p className="card-desc">ログチャンネルや警告しきい値を設定します</p>
           <Link
             to={`/dashboard/${guildId}/moderation`}
-            className="btn btn-secondary"
-            style={{ marginTop: "16px", display: "inline-flex" }}
-          >
-            設定する →
-          </Link>
-        </div>
-        <div className="card">
-          <h3 className="card-title">⚙️ 一般設定</h3>
-          <p className="card-desc">AFK時間やデータ保持期間を設定します</p>
-          <Link
-            to={`/dashboard/${guildId}/general`}
             className="btn btn-secondary"
             style={{ marginTop: "16px", display: "inline-flex" }}
           >
