@@ -39,7 +39,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-page fade-in">
       <div className="page-header">
-        <h1 className="page-title">{t('dashboard.title')}</h1>
+        <h1 className="page-title">{t("dashboard.title")}</h1>
         <p className="page-subtitle">サーバーの概要を確認できます</p>
       </div>
 
@@ -49,14 +49,21 @@ export default function Dashboard() {
         </div>
       ) : (
         <div className="stats-grid">
-          {statCards.map(card => (
+          {statCards.map((card) => (
             <div key={card.key} className="stat-card">
-              <div className="stat-icon" style={{ background: `${card.color}20`, color: card.color }}>
+              <div
+                className="stat-icon"
+                style={{ background: `${card.color}20`, color: card.color }}
+              >
                 {card.icon}
               </div>
               <div className="stat-info">
-                <span className="stat-value">{card.value.toLocaleString()}</span>
-                <span className="stat-label">{t(`dashboard.stats.${card.key}`)}</span>
+                <span className="stat-value">
+                  {card.value.toLocaleString()}
+                </span>
+                <span className="stat-label">
+                  {t(`dashboard.stats.${card.key}`)}
+                </span>
               </div>
             </div>
           ))}
@@ -66,22 +73,47 @@ export default function Dashboard() {
       <div className="dashboard-cards">
         <div className="card">
           <h3 className="card-title">🕐 時報設定</h3>
-          <p className="card-desc">時間ごとのアナウンスメッセージを設定します</p>
-          <Link to={`/dashboard/${guildId}/hourly`} className="btn btn-secondary" style={{ marginTop: '16px', display: 'inline-flex' }}>
+          <p className="card-desc">
+            時間ごとのアナウンスメッセージを設定します
+          </p>
+          <Link
+            to={`/dashboard/${guildId}/hourly`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
             設定する →
           </Link>
         </div>
         <div className="card">
           <h3 className="card-title">🛡️ モデレーション</h3>
           <p className="card-desc">ログチャンネルや警告しきい値を設定します</p>
-          <Link to={`/dashboard/${guildId}/moderation`} className="btn btn-secondary" style={{ marginTop: '16px', display: 'inline-flex' }}>
+          <Link
+            to={`/dashboard/${guildId}/moderation`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
             設定する →
           </Link>
         </div>
         <div className="card">
           <h3 className="card-title">⚙️ 一般設定</h3>
           <p className="card-desc">AFK時間やデータ保持期間を設定します</p>
-          <Link to={`/dashboard/${guildId}/general`} className="btn btn-secondary" style={{ marginTop: '16px', display: 'inline-flex' }}>
+          <Link
+            to={`/dashboard/${guildId}/general`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
+            設定する →
+          </Link>
+        </div>
+        <div className="card">
+          <h3 className="card-title">📩 申請システム</h3>
+          <p className="card-desc">申請の設定と履歴を管理します</p>
+          <Link
+            to={`/dashboard/${guildId}/apply`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
             設定する →
           </Link>
         </div>
