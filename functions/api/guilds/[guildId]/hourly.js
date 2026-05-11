@@ -1,29 +1,33 @@
-import { getSession, json, unauthorized } from '../../_utils/session.js';
 import { getDb } from '../../_utils/db.js';
+import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await getSession(request, env);
+  const session = await verifyGuildAccess(request, env, params.guildId);
   if (!session) return unauthorized();
 
   const { guildId } = params;
   const db = getDb(env);
 
-  if (request.method === 'GET') {
+  if (request.method === "GET") {
     const [settingsRows, messageRows] = await Promise.all([
-      db.execute({
-        sql: `SELECT hourly_channel_id FROM settings WHERE guild_id = ?`,
-        args: [guildId],
-      }).catch(() => ({ rows: [] })),
-      db.execute({
-        sql: `SELECT * FROM hourly_messages WHERE guild_id = ?`,
-        args: [guildId],
-      }).catch(() => ({ rows: [] })),
+      db
+        .execute({
+          sql: `SELECT hourly_channel_id FROM settings WHERE guild_id = ?`,
+          args: [guildId],
+        })
+        .catch(() => ({ rows: [] })),
+      db
+        .execute({
+          sql: `SELECT * FROM hourly_messages WHERE guild_id = ?`,
+          args: [guildId],
+        })
+        .catch(() => ({ rows: [] })),
     ]);
 
     const messages = {};
     for (const row of messageRows.rows) {
-      const key = row.hour === -1 ? 'default' : String(row.hour);
+      const key = row.hour === -1 ? "default" : String(row.hour);
       messages[key] = {
         content: row.content ?? "",
         image: row.image_url ?? "",
@@ -33,7 +37,7 @@ export async function onRequest(ctx) {
     }
 
     return json({
-      channel_id: settingsRows.rows[0]?.hourly_channel_id ?? '',
+      channel_id: settingsRows.rows[0]?.hourly_channel_id ?? "",
       messages,
     });
   }
@@ -79,5 +83,5 @@ export async function onRequest(ctx) {
     return json({ ok: true });
   }
 
-  return json({ error: 'Method not allowed' }, 405);
+  return json({ error: "Method not allowed" }, 405);
 }

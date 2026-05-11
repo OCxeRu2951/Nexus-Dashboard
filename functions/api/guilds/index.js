@@ -6,15 +6,31 @@ export async function onRequest(ctx) {
   const session = await getSession(request, env);
   if (!session) return unauthorized();
 
-  // ユーザーのギルド一覧をDiscord APIから取得
-  const guildsRes = await fetch("https://discord.com/api/users/@me/guilds", {
-    headers: { Authorization: `Bearer ${session.access_token}` },
-  });
+  // KVキャッシュから取得
+  const cacheKey = `guilds_cache:${session.user.id}`;
+  let allGuilds = null;
 
-  if (!guildsRes.ok) return json({ error: "Failed to fetch guilds" }, 500);
-  const allGuilds = await guildsRes.json();
+  try {
+    const cached = await env.SESSIONS.get(cacheKey);
+    if (cached) {
+      allGuilds = JSON.parse(cached);
+    }
+  } catch {}
 
-  // 管理権限のあるギルドのみ
+  if (!allGuilds) {
+    const guildsRes = await fetch("https://discord.com/api/users/@me/guilds", {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+
+    if (!guildsRes.ok) return json({ error: "Failed to fetch guilds" }, 500);
+    allGuilds = await guildsRes.json();
+
+    // KVに5分間キャッシュ
+    await env.SESSIONS.put(cacheKey, JSON.stringify(allGuilds), {
+      expirationTtl: 300,
+    }).catch(() => {});
+  }
+
   const manageable = allGuilds.filter(
     (g) => (BigInt(g.permissions) & BigInt(0x20)) === BigInt(0x20),
   );

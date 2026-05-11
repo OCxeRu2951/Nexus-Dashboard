@@ -1,8 +1,8 @@
-import { getSession, json, unauthorized } from '../../_utils/session.js';
+import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await getSession(request, env);
+  const session = await verifyGuildAccess(request, env, params.guildId);
   if (!session) return unauthorized();
 
   const { guildId } = params;
@@ -11,7 +11,7 @@ export async function onRequest(ctx) {
     headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` },
   });
 
-  if (!guildRes.ok) return json({ error: 'Guild not found' }, 404);
+  if (!guildRes.ok) return json({ error: "Guild not found" }, 404);
   const guild = await guildRes.json();
 
   return json({

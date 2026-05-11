@@ -1,23 +1,25 @@
-import { getSession, json, unauthorized } from '../../_utils/session.js';
 import { getDb } from '../../_utils/db.js';
+import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await getSession(request, env);
+  const session = await verifyGuildAccess(request, env, params.guildId);
   if (!session) return unauthorized();
 
   const { guildId } = params;
   const db = getDb(env);
 
-  if (request.method === 'GET') {
-    const { rows } = await db.execute({
-      sql: `SELECT * FROM mod_settings WHERE guild_id = ?`,
-      args: [guildId],
-    }).catch(() => ({ rows: [] }));
+  if (request.method === "GET") {
+    const { rows } = await db
+      .execute({
+        sql: `SELECT * FROM mod_settings WHERE guild_id = ?`,
+        args: [guildId],
+      })
+      .catch(() => ({ rows: [] }));
 
     const row = rows[0] ?? {};
     return json({
-      log_channel_id: row.log_channel_id ?? '',
+      log_channel_id: row.log_channel_id ?? "",
       warn_threshold_timeout: row.warn_threshold_timeout ?? 3,
       warn_threshold_ban: row.warn_threshold_ban ?? 5,
       timeout_duration_min: row.timeout_duration_min ?? 60,
@@ -26,7 +28,7 @@ export async function onRequest(ctx) {
     });
   }
 
-  if (request.method === 'PUT') {
+  if (request.method === "PUT") {
     const body = await request.json();
     const {
       log_channel_id,
@@ -70,5 +72,5 @@ export async function onRequest(ctx) {
     return json({ ok: true });
   }
 
-  return json({ error: 'Method not allowed' }, 405);
+  return json({ error: "Method not allowed" }, 405);
 }

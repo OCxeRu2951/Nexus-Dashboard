@@ -1,9 +1,9 @@
-import { getSession, json, unauthorized } from "../../_utils/session.js";
 import { getDb } from "../../_utils/db.js";
+import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await getSession(request, env);
+  const session = await verifyGuildAccess(request, env, params.guildId);
   if (!session) return unauthorized();
 
   const { guildId } = params;
