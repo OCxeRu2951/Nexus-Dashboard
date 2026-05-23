@@ -77,5 +77,8 @@
     "automod": "Auto Moderation",
     "automodSpam": "Spam Detection",
     "automodInvite": "Invite Link Detection"
+  },
+  "apply": {
+    "title": "Application System"
   }
 }
