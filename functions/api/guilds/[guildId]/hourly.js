@@ -60,18 +60,33 @@ export async function onRequest(ctx) {
     });
 
     for (const [key, msg] of Object.entries(messages ?? {})) {
-      const hour = key === "default" ? -1 : parseInt(key, 10);
-      if (key !== "default" && isNaN(hour)) continue;
+      let hour, dow;
 
-      // 空メッセージはスキップ
+      if (key === "default") {
+        hour = -1;
+        dow = null;
+      } else if (key.startsWith("default_")) {
+        hour = -1;
+        dow = parseInt(key.split("_")[1], 10);
+      } else if (key.includes("_")) {
+        const parts = key.split("_");
+        hour = parseInt(parts[0], 10);
+        dow = parseInt(parts[1], 10);
+      } else {
+        hour = parseInt(key, 10);
+        dow = null;
+      }
+
+      if (isNaN(hour)) continue;
       if (!msg.content && !msg.image && !msg.file_url && !msg.embed) continue;
 
       await db.execute({
-        sql: `INSERT INTO hourly_messages (guild_id, hour, content, image_url, file_url, embed, enabled)
-            VALUES (?, ?, ?, ?, ?, ?, 1)`,
+        sql: `INSERT INTO hourly_messages (guild_id, hour, day_of_week, content, image_url, file_url, embed, enabled)
+          VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
         args: [
           guildId,
           hour,
+          dow ?? null,
           msg.content || null,
           msg.image || null,
           msg.file_url || null,

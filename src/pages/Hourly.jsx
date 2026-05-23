@@ -7,6 +7,11 @@ import "./Hourly.css";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
+const DAYS = {
+  ja: ['全曜日', '日', '月', '火', '水', '木', '金', '土'],
+  en: ['All',    'Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+};
+
 const EMPTY_MESSAGE = {
   content: "",
   image: "",
@@ -23,6 +28,7 @@ export default function Hourly() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [useEmbed, setUseEmbed] = useState(false);
+  const [selectedDow, setSelectedDow] = useState("all");
 
   useEffect(() => {
     api
@@ -36,7 +42,14 @@ export default function Hourly() {
   }, [guildId]);
 
   const handleSelectHour = (hour) => {
-    const key = hour === "default" ? "default" : String(hour);
+    const key =
+      hour === "default"
+        ? selectedDow === "all"
+          ? "default"
+          : `default_${selectedDow}`
+        : selectedDow === "all"
+          ? String(hour)
+          : `${hour}_${selectedDow}`;
     setSelected(key);
     const msg = messages[key] ?? { ...EMPTY_MESSAGE };
     setUseEmbed(!!msg.embed);
@@ -114,7 +127,30 @@ export default function Hourly() {
     }
   };
 
-  const hasMessage = (key) => !!messages[key];
+  const hasMessage = (hour) => {
+    const key =
+      hour === "default"
+        ? selectedDow === "all"
+          ? "default"
+          : `default_${selectedDow}`
+        : selectedDow === "all"
+          ? String(hour)
+          : `${hour}_${selectedDow}`;
+    return !!messages[key];
+  };
+
+    const DOW_LABELS = {
+      ja: ["全曜日", "日", "月", "火", "水", "木", "金", "土"],
+      en: ["All", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    };
+    const lang = i18n.language === "ja" ? "ja" : "en";
+    const dowLabel =
+      selectedDow === "all"
+        ? DOW_LABELS[lang][0]
+        : DOW_LABELS[lang][Number(selectedDow) + 1];
+    const hourLabel = selected?.startsWith("default")
+      ? "Default"
+      : `${(selected?.split("_")[0] ?? "").padStart(2, "0")}:00`;
 
   return (
     <div className="hourly-page fade-in">
@@ -150,13 +186,45 @@ export default function Hourly() {
               </div>
             </div>
 
+            <div className="card" style={{ marginBottom: 16 }}>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">
+                  {lang === "ja" ? "曜日" : "Day of Week"}
+                </label>
+                <select
+                  className="form-input"
+                  value={selectedDow}
+                  onChange={(e) => {
+                    setSelectedDow(
+                      e.target.value === "all" ? "all" : Number(e.target.value),
+                    );
+                    setSelected(null);
+                  }}
+                >
+                  {DAYS[lang].map((d, i) => {
+                    const val = i === 0 ? "all" : i - 1;
+                    return (
+                      <option key={i} value={val}>
+                        {d}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
             <div className="card">
               <p className="form-label" style={{ marginBottom: 12 }}>
                 {t("hourly.messages")}
               </p>
 
               <div
-                className={`hour-item ${selected === "default" ? "hour-item--active" : ""}`}
+                className={`hour-item ${
+                  selected ===
+                  (selectedDow === "all" ? "default" : `default_${selectedDow}`)
+                    ? "hour-item--active"
+                    : ""
+                }`}
                 onClick={() => handleSelectHour("default")}
               >
                 <span className="hour-label">Default</span>
@@ -169,7 +237,14 @@ export default function Hourly() {
                 {HOURS.map((h) => (
                   <div
                     key={h}
-                    className={`hour-item hour-item--grid ${selected === String(h) ? "hour-item--active" : ""}`}
+                    className={`hour-item hour-item--grid ${
+                      selected ===
+                      (selectedDow === "all"
+                        ? String(h)
+                        : `${h}_${selectedDow}`)
+                        ? "hour-item--active"
+                        : ""
+                    }`}
                     onClick={() => handleSelectHour(h)}
                   >
                     <span className="hour-label">
@@ -193,10 +268,7 @@ export default function Hourly() {
               <div className="card fade-in">
                 <div className="editor-header">
                   <h3 className="editor-title">
-                    {selected === "default"
-                      ? "Default"
-                      : `${selected.padStart(2, "0")}:00`}
-                    のメッセージ
+                    [{dowLabel}] {hourLabel} のメッセージ
                   </h3>
                   {hasMessage(selected) && (
                     <button
