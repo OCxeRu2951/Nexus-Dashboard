@@ -25,7 +25,7 @@ Nexus Dashboard is the web interface for configuring [Nexus Bot](https://github.
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Frontend | React 18 + Vite |
 | Styling | CSS Modules |
 | i18n | i18next |
@@ -119,7 +119,7 @@ npx wrangler pages deploy dist --project-name=nexus-dashboard --branch=main
 ## Environment Variables
 
 | Name | Description |
-|---|---|
+| --- | --- |
 | `DISCORD_CLIENT_ID` | Discord application client ID |
 | `DISCORD_CLIENT_SECRET` | Discord application client secret |
 | `DISCORD_BOT_TOKEN` | Nexus Bot token |
