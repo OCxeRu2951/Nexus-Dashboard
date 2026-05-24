@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth.jsx";
 import api from "../lib/api";
 import "./Servers.css";
+import NexusIcon from "../components/NexusIcon.jsx";
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export default function Servers() {
     <div className="servers-page">
       <header className="servers-header">
         <div className="servers-logo">
-          <span className="logo-icon">✦</span>
+          <NexusIcon size={20} />
           <span>Nexus</span>
         </div>
         {user && (

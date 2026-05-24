@@ -2,6 +2,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "../hooks/useAuth.jsx";
 import './Sidebar.css';
+import NexusIcon from "../components/NexusIcon.jsx";
 
 const NAV_ITEMS = [
   { key: "dashboard", path: "", icon: "⚡" },
@@ -20,8 +21,10 @@ export default function Sidebar({ guild }) {
     <aside className="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-logo">
-          <span className="logo-icon">✦</span>
-          <span className="logo-text">Nexus</span>
+          <NexusIcon size={20} />
+          <span className="logo-text">
+            <NavLink to="/servers">Nexus</NavLink>
+          </span>
         </div>
       </div>
 

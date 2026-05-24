@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import './Login.css';
+import NexusIcon from "../components/NexusIcon.jsx";
 
 export default function Login() {
   const { t, i18n } = useTranslation();
@@ -27,7 +28,7 @@ export default function Login() {
       <div className="login-container fade-in">
         <div className="login-card">
           <div className="login-logo">
-            <span className="login-logo-icon">✦</span>
+            <NexusIcon size={64} />
           </div>
 
           <h1 className="login-title">{t("login.title")}</h1>
