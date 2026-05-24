@@ -5,6 +5,8 @@
 [![Deploy to Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Pages-f07830?logo=cloudflare&logoColor=white)](https://nexus-dashboard-4nu.pages.dev)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue)](./LICENSE)
 
+[日本語のREADMEはこちら](./README/ja-README.md)
+
 ---
 
 ## Overview
@@ -36,7 +38,7 @@ Nexus Dashboard is the web interface for configuring [Nexus Bot](https://github.
 
 ## Project Structure
 
-```
+```dir
 nexus-dashboard/
 ├── src/
 │   ├── pages/          # Login, Servers, Dashboard, General, Hourly, Moderation, Apply

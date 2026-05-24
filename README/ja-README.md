@@ -5,6 +5,8 @@
 [![Cloudflare Pages](https://img.shields.io/badge/デプロイ先-Cloudflare%20Pages-f07830?logo=cloudflare&logoColor=white)](https://nexus-dashboard-4nu.pages.dev)
 [![License](https://img.shields.io/badge/ライセンス-AGPL--3.0-blue)](./LICENSE)
 
+[Click here for the English README.](../README.md)
+
 ---
 
 ## 概要
