@@ -15,11 +15,13 @@
     "none": "なし"
   },
   "nav": {
-  "dashboard": "ダッシュボード",
-  "general": "一般設定",
-  "hourly": "時報設定",
-  "moderation": "モデレーション",
-  "apply": "申請システム"
+    "dashboard": "ダッシュボード",
+    "general": "一般設定",
+    "hourly": "時報設定",
+    "moderation": "モデレーション",
+    "logout": "ログアウト",
+    "apply": "申請システム",
+    "recruit": "募集"
   },
   "login": {
     "title": "Nexus Dashboard",
@@ -40,7 +42,8 @@
       "members": "メンバー数",
       "commands": "コマンド使用数",
       "warnings": "警告数",
-      "polls": "投票数"
+      "polls": "投票数",
+      "recruits": "募集中"
     }
   },
   "general": {
@@ -79,5 +82,39 @@
   },
   "apply": {
     "title": "申請システム"
+  },
+  "recruit": {
+    "title": "募集",
+    "subtitle": "サーバー内の募集と参加者を確認します",
+    "refresh": "再読み込み",
+    "filter": {
+      "all": "すべて",
+      "open": "募集中",
+      "closed": "締切済み"
+    },
+    "status": {
+      "open": "募集中",
+      "closed": "締切"
+    },
+    "host": "募集者",
+    "channel": "チャンネル",
+    "count": "人数",
+    "countUnlimited": "{{n}}人（上限なし）",
+    "deadline": "締切",
+    "noDeadline": "なし",
+    "created": "作成",
+    "closeReason": "締切理由",
+    "reason": {
+      "full": "定員に到達",
+      "deadline": "締切時刻",
+      "manual": "手動で締切"
+    },
+    "members": "参加者",
+    "noMembers": "まだ参加者はいません",
+    "openInDiscord": "Discordで開く",
+    "empty": "募集はありません",
+    "emptyHint": "Discordで /recruit または b! を使うと、ここに表示されます",
+    "loadError": "募集を読み込めませんでした",
+    "retention": "締め切った募集は30日後に自動で削除されます"
   }
 }

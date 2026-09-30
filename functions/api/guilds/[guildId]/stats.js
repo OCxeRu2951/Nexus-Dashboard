@@ -9,7 +9,7 @@ export async function onRequest(ctx) {
   const { guildId } = params;
   const db = getDb(env);
 
-  const [warnings, polls, guildRes] = await Promise.all([
+  const [warnings, polls, recruitsOpen, guildRes] = await Promise.all([
     db
       .execute({
         sql: `SELECT COUNT(*) as count FROM warnings WHERE guild_id = ?`,
@@ -19,6 +19,12 @@ export async function onRequest(ctx) {
     db
       .execute({
         sql: `SELECT COUNT(*) as count FROM polls WHERE guild_id = ?`,
+        args: [guildId],
+      })
+      .catch(() => ({ rows: [{ count: 0 }] })),
+    db
+      .execute({
+        sql: `SELECT COUNT(*) as count FROM recruits WHERE guild_id = ? AND status = 'open'`,
         args: [guildId],
       })
       .catch(() => ({ rows: [{ count: 0 }] })),
@@ -33,5 +39,6 @@ export async function onRequest(ctx) {
     members: guild?.approximate_member_count ?? 0,
     warnings: Number(warnings.rows[0]?.count ?? 0),
     polls: Number(polls.rows[0]?.count ?? 0),
+    recruits: Number(recruitsOpen.rows[0]?.count ?? 0),
   });
 }

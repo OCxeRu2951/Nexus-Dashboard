@@ -9,6 +9,7 @@ import General from "./pages/General";
 import Hourly from "./pages/Hourly";
 import Moderation from "./pages/Moderation";
 import Apply from "./pages/Apply";
+import Recruit from "./pages/Recruit";
 import DashboardLayout from "./components/DashboardLayout";
 
 function AppRoutes() {
@@ -23,6 +24,7 @@ function AppRoutes() {
           <Route path="hourly" element={<Hourly />} />
           <Route path="moderation" element={<Moderation />} />
           <Route path="apply" element={<Apply />} />
+          <Route path="recruit" element={<Recruit />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

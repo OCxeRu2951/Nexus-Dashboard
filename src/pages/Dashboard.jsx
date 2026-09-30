@@ -13,7 +13,7 @@ export default function Dashboard() {
   useEffect(() => {
     api.get(`/guilds/${guildId}/stats`)
       .then(res => setStats(res.data))
-      .catch(() => setStats({ members: 0, warnings: 0, polls: 0 }))
+      .catch(() => setStats({ members: 0, warnings: 0, polls: 0, recruits: 0 }))
       .finally(() => setLoading(false));
   }, [guildId]);
 
@@ -33,6 +33,12 @@ export default function Dashboard() {
       icon: "📊",
       value: stats?.polls ?? 0,
       color: "#23a55a"
+    },
+    {
+      key: "recruits",
+      icon: "📣",
+      value: stats?.recruits ?? 0,
+      color: "#f07830",
     },
   ];
 
@@ -115,6 +121,17 @@ export default function Dashboard() {
             style={{ marginTop: "16px", display: "inline-flex" }}
           >
             設定する →
+          </Link>
+        </div>
+        <div className="card">
+          <h3 className="card-title">📣 募集</h3>
+          <p className="card-desc">募集の状況と参加者を確認します</p>
+          <Link
+            to={`/dashboard/${guildId}/recruit`}
+            className="btn btn-secondary"
+            style={{ marginTop: "16px", display: "inline-flex" }}
+          >
+            確認する →
           </Link>
         </div>
       </div>

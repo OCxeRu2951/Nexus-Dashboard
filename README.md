@@ -20,7 +20,8 @@ Nexus Dashboard is the web interface for configuring [Nexus Bot](https://github.
 - **General Settings** — Configure AFK timeout, data retention periods
 - **Hourly Announcements** — Set messages per hour and day of week, with embed/image/file support
 - **Moderation** — Configure log channels and warning thresholds
-- **Application System** — View and manage applications submitted via `!apply`
+- **Application System** — View and manage applications submitted via `a!`
+- **Recruitment** — View open and closed recruitment posts (`/recruit`, `b!`) with host, channel, deadline and joined members (read-only)
 - **Dark / Light Mode** — System preference detection with manual toggle
 - **Multilingual** — Japanese and English
 
@@ -41,7 +42,7 @@ Nexus Dashboard is the web interface for configuring [Nexus Bot](https://github.
 ```dir
 nexus-dashboard/
 ├── src/
-│   ├── pages/          # Login, Servers, Dashboard, General, Hourly, Moderation, Apply
+│   ├── pages/          # Login, Servers, Dashboard, General, Hourly, Moderation, Apply, Recruit
 │   ├── components/     # Sidebar, DashboardLayout, ChannelSelect, NexusIcon
 │   ├── hooks/          # useAuth
 │   ├── i18n/           # ja.json, en.json

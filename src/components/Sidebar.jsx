@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { key: "hourly", path: "hourly", icon: "🕐" },
   { key: "moderation", path: "moderation", icon: "🛡️" },
   { key: "apply", path: "apply", icon: "📩" },
+  { key: "recruit", path: "recruit", icon: "📣" },
 ];
 
 export default function Sidebar({ guild }) {

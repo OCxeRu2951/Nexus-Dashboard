@@ -20,7 +20,8 @@
     "hourly": "Hourly",
     "moderation": "Moderation",
     "logout": "Logout",
-    "apply": "Application System"
+    "apply": "Application System",
+    "recruit": "Recruitment"
   },
   "login": {
     "title": "Nexus Dashboard",
@@ -41,7 +42,8 @@
       "members": "Members",
       "commands": "Commands Used",
       "warnings": "Warnings",
-      "polls": "Polls"
+      "polls": "Polls",
+      "recruits": "Open Recruitments"
     }
   },
   "general": {
@@ -80,5 +82,39 @@
   },
   "apply": {
     "title": "Application System"
+  },
+  "recruit": {
+    "title": "Recruitment",
+    "subtitle": "View recruitment posts in this server and who has joined",
+    "refresh": "Refresh",
+    "filter": {
+      "all": "All",
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "status": {
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "host": "Host",
+    "channel": "Channel",
+    "count": "Members",
+    "countUnlimited": "{{n}} (no limit)",
+    "deadline": "Deadline",
+    "noDeadline": "None",
+    "created": "Created",
+    "closeReason": "Closed by",
+    "reason": {
+      "full": "Capacity reached",
+      "deadline": "Deadline",
+      "manual": "Closed manually"
+    },
+    "members": "Joined",
+    "noMembers": "No one has joined yet",
+    "openInDiscord": "Open in Discord",
+    "empty": "No recruitment posts",
+    "emptyHint": "Posts created with /recruit or b! in Discord appear here",
+    "loadError": "Could not load recruitment posts",
+    "retention": "Closed recruitment posts are deleted automatically after 30 days"
   }
 }

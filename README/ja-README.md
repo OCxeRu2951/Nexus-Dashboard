@@ -20,7 +20,8 @@ Nexus Dashboardは [Nexus Bot](https://github.com/OCxeRu2951/DiscordBot-Nexus) �
 - **一般設定** — AFK時間・データ保持期間の設定
 - **時報設定** — 時間・曜日別のメッセージ設定（Embed・画像・ファイル対応）
 - **モデレーション** — ログチャンネル・警告しきい値の設定
-- **申請システム** — `!apply` で送信された申請の閲覧・管理
+- **申請システム** — `a!` で送信された申請の閲覧・管理
+- **募集** — `/recruit`・`b!` で作成された募集の一覧（募集者・チャンネル・締切・参加者）を閲覧（閲覧専用）
 - **ダーク / ライトモード** — システム設定に応じた自動切り替え・手動切り替え
 - **多言語対応** — 日本語・英語
 
@@ -41,7 +42,7 @@ Nexus Dashboardは [Nexus Bot](https://github.com/OCxeRu2951/DiscordBot-Nexus) �
 ```dir
 nexus-dashboard/
 ├── src/
-│   ├── pages/          # Login, Servers, Dashboard, General, Hourly, Moderation, Apply
+│   ├── pages/          # Login, Servers, Dashboard, General, Hourly, Moderation, Apply, Recruit
 │   ├── components/     # Sidebar, DashboardLayout, ChannelSelect, NexusIcon
 │   ├── hooks/          # useAuth
 │   ├── i18n/           # ja.json, en.json
