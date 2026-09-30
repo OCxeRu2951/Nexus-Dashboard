@@ -23,6 +23,14 @@
     "apply": "Application System",
     "recruit": "Recruitment"
   },
+  "access": {
+    "member": "Member (recruitment only)",
+    "memberBadge": "Member",
+    "adminBadge": "Admin",
+    "forbidden": "You don't have access to this server's dashboard. If viewer roles are set for recruitment, ask a server admin.",
+    "loadError": "Could not load server information.",
+    "backToServers": "Back to servers"
+  },
   "login": {
     "title": "Nexus Dashboard",
     "subtitle": "Login with Discord to manage your servers",
@@ -31,7 +39,7 @@
   },
   "servers": {
     "title": "Select Server",
-    "subtitle": "Choose a server to manage",
+    "subtitle": "Choose a server to open",
     "noServers": "No servers with Nexus installed",
     "manage": "Manage"
   },
@@ -85,12 +93,13 @@
   },
   "recruit": {
     "title": "Recruitment",
-    "subtitle": "View recruitment posts in this server and who has joined",
     "refresh": "Refresh",
     "filter": {
       "all": "All",
       "open": "Open",
-      "closed": "Closed"
+      "closed": "Closed",
+      "mine": "Mine",
+      "joined": "Joined"
     },
     "status": {
       "open": "Open",
@@ -115,6 +124,34 @@
     "empty": "No recruitment posts",
     "emptyHint": "Posts created with /recruit or b! in Discord appear here",
     "loadError": "Could not load recruitment posts",
-    "retention": "Closed recruitment posts are deleted automatically after 30 days"
+    "retention": "Closed recruitment posts are deleted automatically after 30 days",
+    "subtitleAdmin": "Review and close recruitment posts, and configure recruitment",
+    "subtitleMember": "See recruitment posts you can join and close your own",
+    "openThread": "Thread",
+    "openForum": "Forum post",
+    "tagMine": "Yours",
+    "tagJoined": "Joined",
+    "closePending": "Closing…",
+    "close": "Close",
+    "closeConfirm": "Close \"{{title}}\"? Members will be notified in Discord.",
+    "closeError": "Could not request closing. Please try again later.",
+    "settings": {
+      "title": "Recruitment Settings",
+      "listChannel": "Recruitment list channel",
+      "listDisabled": "— Not used —",
+      "listHint": "Keeps one message listing open recruitment posts up to date",
+      "threadMode": "How to create threads",
+      "modeThread": "Thread from the recruitment post",
+      "modeForum": "Post in a forum",
+      "threadHint": "Whether to create one can be chosen per post (default: create)",
+      "forumChannel": "Forum channel",
+      "selectForum": "— Select a forum —",
+      "viewerRoles": "Roles that can view recruitment on the dashboard",
+      "viewerEveryone": "None selected, so everyone in the server can view (admins always can)",
+      "viewerSelected": "{{n}} role(s) selected. Only members with these roles and admins can view",
+      "saved": "Saved (Discord updates in a few seconds)",
+      "saveError": "Failed to save",
+      "forumRequired": "Select a forum channel"
+    }
   }
 }

@@ -15,13 +15,13 @@ Nexus Dashboard is the web interface for configuring [Nexus Bot](https://github.
 
 ## Features
 
-- **Authentication** — Discord OAuth2 login with MANAGE_GUILD permission check
-- **Server Selection** — Lists servers where the user has admin permissions and Nexus is installed
+- **Authentication** — Discord OAuth2 login with two access levels: admins (Manage Server) get every page; other members get the Recruitment page only (limited to viewer roles if configured)
+- **Server Selection** — Lists servers where Nexus is installed and the user is an admin or an allowed member
 - **General Settings** — Configure AFK timeout, data retention periods
 - **Hourly Announcements** — Set messages per hour and day of week, with embed/image/file support
 - **Moderation** — Configure log channels and warning thresholds
 - **Application System** — View and manage applications submitted via `a!`
-- **Recruitment** — View open and closed recruitment posts (`/recruit`, `b!`) with host, channel, deadline and joined members (read-only)
+- **Recruitment** — Open and closed recruitment posts (`/recruit`, `b!`) with host, channel, deadline, members and thread links. Members see posts in channels they can view in Discord and can close their own; admins can close any post and edit the list channel, thread / forum mode and viewer roles. Closing is queued and executed by the bot
 - **Dark / Light Mode** — System preference detection with manual toggle
 - **Multilingual** — Japanese and English
 

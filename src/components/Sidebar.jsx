@@ -10,13 +10,15 @@ const NAV_ITEMS = [
   { key: "hourly", path: "hourly", icon: "🕐" },
   { key: "moderation", path: "moderation", icon: "🛡️" },
   { key: "apply", path: "apply", icon: "📩" },
-  { key: "recruit", path: "recruit", icon: "📣" },
+  { key: "recruit", path: "recruit", icon: "📣", member: true },
 ];
 
 export default function Sidebar({ guild }) {
   const { t } = useTranslation();
   const { guildId } = useParams();
   const { user, logout } = useAuth();
+  // メンバー権限では募集ページのみ表示
+  const items = guild?.access === "member" ? NAV_ITEMS.filter((i) => i.member) : NAV_ITEMS;
 
   return (
     <aside className="sidebar">
@@ -42,12 +44,17 @@ export default function Sidebar({ guild }) {
               {guild.name[0]}
             </div>
           )}
-          <span className="guild-name">{guild.name}</span>
+          <div className="guild-meta">
+            <span className="guild-name">{guild.name}</span>
+            {guild.access === "member" && (
+              <span className="guild-access">{t("access.member")}</span>
+            )}
+          </div>
         </div>
       )}
 
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map(item => (
+        {items.map(item => (
           <NavLink
             key={item.key}
             to={`/dashboard/${guildId}/${item.path}`}

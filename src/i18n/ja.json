@@ -23,6 +23,14 @@
     "apply": "申請システム",
     "recruit": "募集"
   },
+  "access": {
+    "member": "メンバー（募集のみ）",
+    "memberBadge": "メンバー",
+    "adminBadge": "管理",
+    "forbidden": "このサーバーのダッシュボードを開く権限がありません。募集の閲覧ロールが設定されている場合は、管理者に確認してください。",
+    "loadError": "サーバー情報を読み込めませんでした。",
+    "backToServers": "サーバー一覧へ戻る"
+  },
   "login": {
     "title": "Nexus Dashboard",
     "subtitle": "Discordアカウントでログインしてサーバーを管理",
@@ -31,7 +39,7 @@
   },
   "servers": {
     "title": "サーバーを選択",
-    "subtitle": "管理するサーバーを選んでください",
+    "subtitle": "開くサーバーを選んでください",
     "noServers": "Botが導入されているサーバーがありません",
     "manage": "管理する"
   },
@@ -85,12 +93,13 @@
   },
   "recruit": {
     "title": "募集",
-    "subtitle": "サーバー内の募集と参加者を確認します",
     "refresh": "再読み込み",
     "filter": {
       "all": "すべて",
       "open": "募集中",
-      "closed": "締切済み"
+      "closed": "締切済み",
+      "mine": "自分の募集",
+      "joined": "参加中"
     },
     "status": {
       "open": "募集中",
@@ -115,6 +124,34 @@
     "empty": "募集はありません",
     "emptyHint": "Discordで /recruit または b! を使うと、ここに表示されます",
     "loadError": "募集を読み込めませんでした",
-    "retention": "締め切った募集は30日後に自動で削除されます"
+    "retention": "締め切った募集は30日後に自動で削除されます",
+    "subtitleAdmin": "サーバー内の募集の確認・締切と、募集機能の設定を行います",
+    "subtitleMember": "参加できる募集の確認と、自分の募集の締切ができます",
+    "openThread": "スレッド",
+    "openForum": "フォーラム",
+    "tagMine": "自分の募集",
+    "tagJoined": "参加中",
+    "closePending": "締切処理中…",
+    "close": "締め切る",
+    "closeConfirm": "「{{title}}」を締め切りますか？参加者にはDiscordで通知されます。",
+    "closeError": "締切の依頼に失敗しました。時間をおいて再度お試しください。",
+    "settings": {
+      "title": "募集設定",
+      "listChannel": "更新リストのチャンネル",
+      "listDisabled": "— 使用しない —",
+      "listHint": "募集中の一覧を1つの投稿で自動更新します",
+      "threadMode": "スレッドの作成方法",
+      "modeThread": "募集投稿からスレッドを作成",
+      "modeForum": "フォーラムに投稿を作成",
+      "threadHint": "作成するかどうかは募集ごとに選べます（既定: 作成する）",
+      "forumChannel": "フォーラムチャンネル",
+      "selectForum": "— フォーラムを選択 —",
+      "viewerRoles": "ダッシュボードで募集を閲覧できるロール",
+      "viewerEveryone": "未選択のため、サーバーの全員が閲覧できます（管理者は常に閲覧可）",
+      "viewerSelected": "{{n}}個のロールを選択中。選択したロールを持つメンバーと管理者のみ閲覧できます",
+      "saved": "保存しました（Discordへの反映は数秒後）",
+      "saveError": "保存に失敗しました",
+      "forumRequired": "フォーラムチャンネルを選択してください"
+    }
   }
 }

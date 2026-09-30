@@ -86,7 +86,13 @@ export default function Servers() {
               <div
                 key={guild.id}
                 className="server-card"
-                onClick={() => navigate(`/dashboard/${guild.id}`)}
+                onClick={() =>
+                  navigate(
+                    guild.access === "member"
+                      ? `/dashboard/${guild.id}/recruit`
+                      : `/dashboard/${guild.id}`,
+                  )
+                }
               >
                 {guild.icon ? (
                   <img
@@ -100,8 +106,16 @@ export default function Servers() {
                 <div className="server-info">
                   <span className="server-name">{guild.name}</span>
                   <span className="server-members">
-                    {guild.approximate_member_count?.toLocaleString() ?? "?"}{" "}
-                    members
+                    {guild.access === "member" ? (
+                      <span className="server-access server-access--member">
+                        {t("access.memberBadge")}
+                      </span>
+                    ) : (
+                      <>
+                        <span className="server-access">{t("access.adminBadge")}</span>
+                        {guild.approximate_member_count?.toLocaleString() ?? "?"} members
+                      </>
+                    )}
                   </span>
                 </div>
                 <span className="server-arrow">→</span>

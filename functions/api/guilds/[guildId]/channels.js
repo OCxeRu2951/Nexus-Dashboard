@@ -17,9 +17,10 @@ export async function onRequest(ctx) {
   if (!res.ok) return json({ error: "Failed to fetch channels" }, 500);
   const channels = await res.json();
 
-  // テキストチャンネルのみ返す
+  // ?type=forum でフォーラムチャンネル、それ以外はテキストチャンネルを返す
+  const type = new URL(request.url).searchParams.get("type") === "forum" ? 15 : 0;
   const textChannels = channels
-    .filter((ch) => ch.type === 0)
+    .filter((ch) => ch.type === type)
     .sort((a, b) => a.position - b.position)
     .map((ch) => ({ id: ch.id, name: ch.name, parent_id: ch.parent_id }));
 

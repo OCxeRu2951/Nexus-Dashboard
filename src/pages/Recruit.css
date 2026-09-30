@@ -257,3 +257,126 @@
         padding: 20px 16px;
     }
 }
+
+/* ---- リンク・タグ・操作 ---- */
+.recruit-links {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.recruit-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.recruit-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.recruit-tag--mine {
+    background: rgba(240, 120, 48, 0.15);
+    color: #f07830;
+}
+
+.recruit-tag--joined {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.recruit-tag--pending {
+    background: rgba(240, 178, 50, 0.15);
+    color: var(--warning);
+}
+
+.recruit-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.recruit-close-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--danger);
+    border-color: rgba(242, 63, 66, 0.4);
+}
+
+.recruit-close-btn:hover {
+    background: rgba(242, 63, 66, 0.1);
+}
+
+.recruit-close-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* ---- 設定（管理者のみ） ---- */
+.recruit-settings {
+    margin-bottom: 20px;
+}
+
+.recruit-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.recruit-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0 16px;
+}
+
+.recruit-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.recruit-role-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.recruit-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.recruit-role input {
+    accent-color: var(--accent);
+}
+
+.recruit-role--on {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--text-primary);
+}
+
+.recruit-save-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.recruit-error {
+    font-size: 13px;
+    color: var(--danger);
+}
