@@ -6,10 +6,10 @@
  *            recruit_settings.viewer_role_ids が設定されている場合は、そのロールを持つ人のみ
  *   none   : サーバーに参加していない、または閲覧ロールを持っていない
  *
- * 設定系の API は従来どおり session.js の verifyGuildAccess（管理者のみ）を使う。
- * このファイルは募集ページ関連の API からのみ使う。
+ * 設定系の API は requireGuildAdmin（管理者のみ・Nexus 導入済みのサーバーのみ）を使う。
+ * 募集ページ関連の API は resolveGuildAccess を使う。
  */
-import { getSession } from "./session.js";
+import { getSession, json, unauthorized, forbidden } from "./session.js";
 import { getDb } from "./db.js";
 
 const DISCORD_API = "https://discord.com/api/v10";
@@ -56,12 +56,19 @@ export async function getUserGuilds(session, env) {
 /**
  * Bot トークンで Discord API を叩く。結果はエッジキャッシュに短時間保存する
  * （KV の書き込み回数を消費しないよう Cache API を使う。使えない環境では毎回取得）
+ *   fresh: キャッシュを読まずに取得する（保存時の照合など、最新の状態が必要なとき）
+ *   notFoundAsNull: 404 を null として返す
+ *   missingAsNull: 403 / 404 を null として返す（Bot が参加していないサーバー）
  */
-async function botFetchJson(env, path, { ttl = CACHE_TTL_SECONDS, notFoundAsNull = false } = {}) {
+async function botFetchJson(
+  env,
+  path,
+  { ttl = CACHE_TTL_SECONDS, fresh = false, notFoundAsNull = false, missingAsNull = false } = {},
+) {
   const cache = typeof caches !== "undefined" ? caches.default : null;
   const cacheKey = new Request(`https://nexus-dashboard.cache/${path}`);
 
-  if (cache) {
+  if (cache && !fresh) {
     const hit = await cache.match(cacheKey).catch(() => null);
     if (hit) return hit.json();
   }
@@ -69,7 +76,8 @@ async function botFetchJson(env, path, { ttl = CACHE_TTL_SECONDS, notFoundAsNull
   const res = await fetch(`${DISCORD_API}/${path}`, {
     headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` },
   });
-  if (notFoundAsNull && res.status === 404) return null;
+  if ((notFoundAsNull || missingAsNull) && res.status === 404) return null;
+  if (missingAsNull && res.status === 403) return null;
   if (!res.ok) throw new Error(`Discord API ${path} failed: ${res.status}`);
 
   const data = await res.json();
@@ -92,8 +100,16 @@ export function fetchGuildRoles(env, guildId) {
   return botFetchJson(env, `guilds/${guildId}/roles`);
 }
 
-export function fetchGuildChannels(env, guildId) {
-  return botFetchJson(env, `guilds/${guildId}/channels`);
+export function fetchGuildChannels(env, guildId, { fresh = false } = {}) {
+  return botFetchJson(env, `guilds/${guildId}/channels`, { fresh });
+}
+
+/**
+ * Nexus（Bot）がそのサーバーに参加しているか
+ */
+export async function isBotInGuild(env, guildId) {
+  const guild = await botFetchJson(env, `guilds/${guildId}`, { missingAsNull: true }).catch(() => null);
+  return guild != null;
 }
 
 export function parseRoleIds(raw) {
@@ -111,6 +127,31 @@ export async function getViewerRoleIds(db, guildId) {
     .execute({ sql: `SELECT viewer_role_ids FROM recruit_settings WHERE guild_id = ?`, args: [guildId] })
     .catch(() => ({ rows: [] }));
   return parseRoleIds(rows[0]?.viewer_role_ids);
+}
+
+/**
+ * 設定系 API（管理者のみ）のアクセス確認
+ *   未ログイン・Discord のトークン切れ → 401
+ *   管理権限がない・Nexus が参加していないサーバー → 403
+ * （未導入のサーバーIDで設定を書き込めないよう、Bot の参加も確認する）
+ *
+ * @returns {Promise<{ session: object } | { error: Response }>}
+ */
+export async function requireGuildAdmin(request, env, guildId) {
+  const session = await getSession(request, env);
+  if (!session) return { error: unauthorized() };
+
+  const guilds = await getUserGuilds(session, env);
+  if (!guilds) return { error: unauthorized() };
+
+  const guild = guilds.find((g) => g.id === guildId);
+  if (!guild || !isAdminGuild(guild)) return { error: forbidden() };
+
+  if (!(await isBotInGuild(env, guildId))) {
+    return { error: json({ error: "Nexus is not in this server" }, 403) };
+  }
+
+  return { session };
 }
 
 /**

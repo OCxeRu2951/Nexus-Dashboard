@@ -8,6 +8,7 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "success": "Saved successfully",
+    "saveError": "Failed to save. Please check your input.",
     "confirm": "Confirm",
     "back": "Back",
     "enabled": "Enabled",
@@ -74,7 +75,8 @@
     "embedColor": "Embed Color",
     "default": "Default",
     "addMessage": "Add Message",
-    "preview": "Preview"
+    "preview": "Preview",
+    "urlHint": "HTTPS URLs only (cdn.discordapp.com / media.discordapp.net)"
   },
   "moderation": {
     "title": "Moderation Settings",

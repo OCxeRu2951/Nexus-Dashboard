@@ -22,6 +22,7 @@ export default function Apply() {
   const [statusFilter, setFilter] = useState("all");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
 
@@ -44,12 +45,14 @@ export default function Apply() {
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     try {
       await api.put(`/guilds/${guildId}/apply-settings`, settings);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       console.error(err);
+      setSaveError(true);
     } finally {
       setSaving(false);
     }
@@ -182,6 +185,13 @@ export default function Apply() {
           {saved && (
             <span className="badge badge-success">
               ✓ {lang === "ja" ? "保存しました" : "Saved"}
+            </span>
+          )}
+          {saveError && (
+            <span className="badge badge-danger">
+              {lang === "ja"
+                ? "保存に失敗しました。入力内容を確認してください"
+                : "Failed to save. Please check your input."}
             </span>
           )}
           <button

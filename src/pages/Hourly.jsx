@@ -27,6 +27,7 @@ export default function Hourly() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [useEmbed, setUseEmbed] = useState(false);
   const [selectedDow, setSelectedDow] = useState("all");
 
@@ -113,6 +114,7 @@ export default function Hourly() {
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     try {
       await api.put(`/guilds/${guildId}/hourly`, {
         channel_id: channelId,
@@ -122,6 +124,7 @@ export default function Hourly() {
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       console.error(err);
+      setSaveError(true);
     } finally {
       setSaving(false);
     }
@@ -304,10 +307,11 @@ export default function Hourly() {
                   <input
                     type="text"
                     className="form-input"
-                    placeholder="https://example.com/image.png"
+                    placeholder="https://cdn.discordapp.com/attachments/..."
                     value={currentMsg?.image ?? ""}
                     onChange={(e) => updateCurrentMsg("image", e.target.value)}
                   />
+                  <p className="form-hint">{t("hourly.urlHint")}</p>
                 </div>
 
                 <div className="form-group">
@@ -315,7 +319,7 @@ export default function Hourly() {
                   <input
                     type="text"
                     className="form-input"
-                    placeholder="https://example.com/file.mp3"
+                    placeholder="https://cdn.discordapp.com/attachments/..."
                     value={currentMsg?.file_url ?? ""}
                     onChange={(e) =>
                       updateCurrentMsg("file_url", e.target.value)
@@ -325,6 +329,8 @@ export default function Hourly() {
                     {i18n.language === "ja"
                       ? "画像・音声・その他ファイルのURL"
                       : "URL of image, audio, or other file"}
+                    {" / "}
+                    {t("hourly.urlHint")}
                   </p>
                 </div>
 
@@ -392,10 +398,11 @@ export default function Hourly() {
                       <input
                         type="text"
                         className="form-input"
-                        placeholder="https://example.com/image.png"
+                        placeholder="https://cdn.discordapp.com/attachments/..."
                         value={currentMsg?.embed?.image ?? ""}
                         onChange={(e) => updateEmbed("image", e.target.value)}
                       />
+                      <p className="form-hint">{t("hourly.urlHint")}</p>
                     </div>
                   </div>
                 )}
@@ -407,6 +414,9 @@ export default function Hourly() {
                 <span className="badge badge-success">
                   ✓ {t("common.success")}
                 </span>
+              )}
+              {saveError && (
+                <span className="badge badge-danger">{t("common.saveError")}</span>
               )}
               <button
                 className="btn btn-primary"
