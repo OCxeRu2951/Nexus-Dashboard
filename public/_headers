@@ -1,0 +1,9 @@
+# 静的ファイル（画面）用のセキュリティヘッダー
+# Pages Functions（/api/*）の応答には効かないため、API 側は functions/api/_middleware.js で付ける
+# 読み込み先: 自サイト / Google Fonts / Discord の画像 CDN（アイコン・アバター）
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
