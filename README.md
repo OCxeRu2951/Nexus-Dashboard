@@ -64,7 +64,7 @@ nexus-dashboard/
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 24.22.1+ (or 22.23.4+)
 - Wrangler CLI (`npm i -g wrangler`)
 - Cloudflare account
 - Turso database
