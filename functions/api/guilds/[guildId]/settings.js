@@ -1,10 +1,20 @@
 import { getDb } from '../../_utils/db.js';
-import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
+import { json } from "../../_utils/session.js";
+import { requireGuildAdmin } from "../../_utils/access.js";
+import { readJsonBody, intInRange } from "../../_utils/validate.js";
+
+// 画面（General.jsx）の入力範囲と同じ
+const RANGES = {
+  afk_hours:        [1, 720],
+  poll_days:        [1, 365],
+  warnings_days:    [1, 365],
+  application_days: [1, 365],
+};
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await verifyGuildAccess(request, env, params.guildId);
-  if (!session) return unauthorized();
+  const { error } = await requireGuildAdmin(request, env, params.guildId);
+  if (error) return error;
 
   const { guildId } = params;
   const db = getDb(env);
@@ -28,8 +38,16 @@ export async function onRequest(ctx) {
   }
 
   if (request.method === "PUT") {
-    const body = await request.json();
-    const { afk_hours, poll_days, warnings_days, application_days } = body;
+    const body = await readJsonBody(request);
+    if (!body) return json({ error: "Invalid body" }, 400);
+
+    const values = Object.fromEntries(
+      Object.entries(RANGES).map(([key, [min, max]]) => [key, intInRange(body[key], min, max)]),
+    );
+    if (Object.values(values).some((v) => v === undefined)) {
+      return json({ error: "Invalid settings" }, 400);
+    }
+    const { afk_hours, poll_days, warnings_days, application_days } = values;
 
     await db.execute({
       sql: `INSERT INTO guild_settings (guild_id, afk_hours, poll_days, warnings_days, application_days)

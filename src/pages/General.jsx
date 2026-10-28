@@ -18,6 +18,7 @@ export default function General() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   useEffect(() => {
     api.get(`/guilds/${guildId}/settings`)
@@ -28,12 +29,14 @@ export default function General() {
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     try {
       await api.put(`/guilds/${guildId}/settings`, settings);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       console.error(err);
+      setSaveError(true);
     } finally {
       setSaving(false);
     }
@@ -83,6 +86,9 @@ export default function General() {
           <div className="save-row">
             {saved && (
               <span className="badge badge-success">✓ {t('common.success')}</span>
+            )}
+            {saveError && (
+              <span className="badge badge-danger">{t('common.saveError')}</span>
             )}
             <button
               className="btn btn-primary"

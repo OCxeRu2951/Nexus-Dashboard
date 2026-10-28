@@ -21,6 +21,7 @@ export default function Moderation() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   useEffect(() => {
     api
@@ -34,12 +35,14 @@ export default function Moderation() {
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveError(false);
     try {
       await api.put(`/guilds/${guildId}/moderation`, settings);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       console.error(err);
+      setSaveError(true);
     } finally {
       setSaving(false);
     }
@@ -212,6 +215,9 @@ export default function Moderation() {
               <span className="badge badge-success">
                 ✓ {t("common.success")}
               </span>
+            )}
+            {saveError && (
+              <span className="badge badge-danger">{t("common.saveError")}</span>
             )}
             <button
               className="btn btn-primary"

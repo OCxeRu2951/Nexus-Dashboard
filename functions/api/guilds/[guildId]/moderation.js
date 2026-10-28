@@ -1,10 +1,17 @@
 import { getDb } from '../../_utils/db.js';
-import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
+import { json } from "../../_utils/session.js";
+import { requireGuildAdmin } from "../../_utils/access.js";
+import {
+  readJsonBody,
+  intInRange,
+  snowflakeOrNull,
+  rejectForeignChannels,
+} from "../../_utils/validate.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await verifyGuildAccess(request, env, params.guildId);
-  if (!session) return unauthorized();
+  const { error } = await requireGuildAdmin(request, env, params.guildId);
+  if (error) return error;
 
   const { guildId } = params;
   const db = getDb(env);
@@ -29,15 +36,25 @@ export async function onRequest(ctx) {
   }
 
   if (request.method === "PUT") {
-    const body = await request.json();
-    const {
-      log_channel_id,
-      warn_threshold_timeout,
-      warn_threshold_ban,
-      timeout_duration_min,
-      automod_spam,
-      automod_invite,
-    } = body;
+    const body = await readJsonBody(request);
+    if (!body) return json({ error: "Invalid body" }, 400);
+
+    // 範囲は画面（Moderation.jsx）の入力範囲と同じ
+    const log_channel_id         = snowflakeOrNull(body.log_channel_id);
+    const warn_threshold_timeout = intInRange(body.warn_threshold_timeout, 1, 100);
+    const warn_threshold_ban     = intInRange(body.warn_threshold_ban, 1, 100);
+    const timeout_duration_min   = intInRange(body.timeout_duration_min, 1, 40320);
+    const { automod_spam, automod_invite } = body;
+
+    if (
+      [log_channel_id, warn_threshold_timeout, warn_threshold_ban, timeout_duration_min]
+        .some((v) => v === undefined)
+    ) {
+      return json({ error: "Invalid settings" }, 400);
+    }
+
+    const foreign = await rejectForeignChannels(env, guildId, [log_channel_id]);
+    if (foreign) return foreign;
 
     await db.execute({
       sql: `INSERT INTO mod_settings (

@@ -1,6 +1,12 @@
 import { getDb } from "../../_utils/db.js";
-import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
-import { parseRoleIds } from "../../_utils/access.js";
+import { json } from "../../_utils/session.js";
+import { parseRoleIds, requireGuildAdmin } from "../../_utils/access.js";
+import {
+  SNOWFLAKE,
+  readJsonBody,
+  snowflakeOrNull,
+  rejectForeignChannels,
+} from "../../_utils/validate.js";
 
 // 募集設定（管理者のみ）
 //   GET /api/guilds/:guildId/recruit-settings
@@ -11,18 +17,11 @@ import { parseRoleIds } from "../../_utils/access.js";
 // 更新リストの投稿・移動は Bot が行うため、保存後に refresh_list を依頼する。
 const THREAD_MODES = ["thread", "forum"];
 const VIEWER_ROLES_MAX = 25;
-const SNOWFLAKE = /^\d{15,25}$/;
-
-function snowflakeOrNull(value) {
-  if (value == null || value === "") return null;
-  const s = String(value);
-  return SNOWFLAKE.test(s) ? s : undefined; // undefined = 不正値
-}
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await verifyGuildAccess(request, env, params.guildId);
-  if (!session) return unauthorized();
+  const { session, error } = await requireGuildAdmin(request, env, params.guildId);
+  if (error) return error;
 
   const { guildId } = params;
   const db = getDb(env);
@@ -42,7 +41,7 @@ export async function onRequest(ctx) {
   }
 
   if (request.method === "PUT") {
-    const body = await request.json().catch(() => null);
+    const body = await readJsonBody(request);
     if (!body) return json({ error: "Invalid body" }, 400);
 
     const listChannelId  = snowflakeOrNull(body.list_channel_id);
@@ -60,6 +59,9 @@ export async function onRequest(ctx) {
     if (roleIds.length > VIEWER_ROLES_MAX || roleIds.some((id) => !SNOWFLAKE.test(id))) {
       return json({ error: "Invalid viewer_role_ids" }, 400);
     }
+
+    const foreign = await rejectForeignChannels(env, guildId, [listChannelId, forumChannelId]);
+    if (foreign) return foreign;
 
     const uniqueRoles = [...new Set(roleIds)];
     const rolesJson = uniqueRoles.length > 0 ? JSON.stringify(uniqueRoles) : null;

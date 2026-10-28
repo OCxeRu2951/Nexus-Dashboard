@@ -1,9 +1,10 @@
-import { verifyGuildAccess, json, unauthorized } from "../../_utils/session.js";
+import { json } from "../../_utils/session.js";
+import { requireGuildAdmin } from "../../_utils/access.js";
 
 export async function onRequest(ctx) {
   const { request, env, params } = ctx;
-  const session = await verifyGuildAccess(request, env, params.guildId);
-  if (!session) return unauthorized();
+  const { error } = await requireGuildAdmin(request, env, params.guildId);
+  if (error) return error;
 
   const { guildId } = params;
 

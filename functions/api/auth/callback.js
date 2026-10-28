@@ -1,12 +1,24 @@
-import { setSessionCookie, json } from "../_utils/session.js";
+import {
+  setSessionCookie,
+  getOAuthState,
+  clearOAuthStateCookie,
+  SESSION_TTL_SECONDS,
+} from "../_utils/session.js";
 
 export async function onRequest(ctx) {
   const { request, env } = ctx;
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
+  const state = url.searchParams.get("state");
+  const expectedState = getOAuthState(request);
 
   if (!code) {
-    return Response.redirect(`${env.DASHBOARD_URL}/login?error=no_code`, 302);
+    return clearOAuthStateCookie(Response.redirect(`${env.DASHBOARD_URL}/login?error=no_code`, 302));
+  }
+
+  // login.js で発行した state と一致しない戻りは受け付けない（ログイン CSRF 対策）
+  if (!state || !expectedState || state !== expectedState) {
+    return clearOAuthStateCookie(Response.redirect(`${env.DASHBOARD_URL}/login?error=invalid_state`, 302));
   }
 
   try {
@@ -34,28 +46,27 @@ export async function onRequest(ctx) {
     if (!userRes.ok) throw new Error("User fetch failed");
     const user = await userRes.json();
 
-    // セッション作成
+    // セッション作成（refresh_token は使わないので保存しない）
     const sessionId = crypto.randomUUID();
     const sessionData = {
       user,
       access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
       expires_at: Date.now() + tokenData.expires_in * 1000,
     };
 
     await env.SESSIONS.put(
       `session:${sessionId}`,
       JSON.stringify(sessionData),
-      { expirationTtl: 60 * 60 * 24 * 7 }, // 7日
+      { expirationTtl: SESSION_TTL_SECONDS },
     );
 
     const response = Response.redirect(`${env.DASHBOARD_URL}/servers`, 302);
-    return setSessionCookie(response, sessionId);
+    return clearOAuthStateCookie(setSessionCookie(response, sessionId));
   } catch (err) {
     console.error("OAuth callback error:", err);
-    return Response.redirect(
+    return clearOAuthStateCookie(Response.redirect(
       `${env.DASHBOARD_URL}/login?error=auth_failed`,
       302,
-    );
+    ));
   }
 }

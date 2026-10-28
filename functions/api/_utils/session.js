@@ -1,7 +1,25 @@
-export function getSessionId(request) {
+// __Host- 付きの Cookie は Secure・Path=/・Domain なしでしか設定できないため、
+// 同じドメインの他のサブドメインから上書きされない
+const SESSION_COOKIE = "__Host-nexus_session";
+const STATE_COOKIE   = "__Host-nexus_oauth_state";
+export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7; // 7日
+const STATE_TTL_SECONDS = 60 * 10;
+
+export function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") ?? "";
-  const match = cookie.match(/nexus_session=([^;]+)/);
-  return match ? match[1] : null;
+  for (const part of cookie.split(";")) {
+    const i = part.indexOf("=");
+    if (i !== -1 && part.slice(0, i).trim() === name) return part.slice(i + 1).trim() || null;
+  }
+  return null;
+}
+
+export function getSessionId(request) {
+  return getCookie(request, SESSION_COOKIE);
+}
+
+export function getOAuthState(request) {
+  return getCookie(request, STATE_COOKIE);
 }
 
 export async function getSession(request, env) {
@@ -14,28 +32,36 @@ export async function getSession(request, env) {
   return JSON.parse(raw);
 }
 
-export function setSessionCookie(response, sessionId) {
+function withCookie(response, cookie) {
   const headers = new Headers(response.headers);
-  headers.set(
-    "Set-Cookie",
-    `nexus_session=${sessionId}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`,
-  );
+  headers.append("Set-Cookie", cookie);
   return new Response(response.body, {
     status: response.status,
     headers,
   });
 }
 
-export function clearSessionCookie(response) {
-  const headers = new Headers(response.headers);
-  headers.set(
-    "Set-Cookie",
-    "nexus_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+export function setSessionCookie(response, sessionId) {
+  return withCookie(
+    response,
+    `${SESSION_COOKIE}=${sessionId}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_SECONDS}`,
   );
-  return new Response(response.body, {
-    status: response.status,
-    headers,
-  });
+}
+
+export function clearSessionCookie(response) {
+  return withCookie(response, `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`);
+}
+
+// OAuth の state（ログイン CSRF 対策）。Discord からの戻り（トップレベルの GET）で届くよう SameSite=Lax
+export function setOAuthStateCookie(response, state) {
+  return withCookie(
+    response,
+    `${STATE_COOKIE}=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${STATE_TTL_SECONDS}`,
+  );
+}
+
+export function clearOAuthStateCookie(response) {
+  return withCookie(response, `${STATE_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`);
 }
 
 export function json(data, status = 200) {
@@ -49,51 +75,6 @@ export function unauthorized() {
   return json({ error: "Unauthorized" }, 401);
 }
 
-export async function verifyGuildAccess(request, env, guildId) {
-  const session = await getSession(request, env);
-  if (!session) return null;
-
-  // KVキャッシュから取得（TTL: 5分）
-  const cacheKey = `guilds_cache:${session.user.id}`;
-  let guilds = null;
-
-  try {
-    const cached = await env.SESSIONS.get(cacheKey);
-    if (cached) {
-      guilds = JSON.parse(cached);
-    }
-  } catch {}
-
-  // キャッシュがなければDiscord APIから取得
-  if (!guilds) {
-    const res = await fetch('https://discord.com/api/users/@me/guilds', {
-      headers: { Authorization: `Bearer ${session.access_token}` },
-    });
-
-    if (!res.ok) {
-      console.log('[verifyGuildAccess] Failed to fetch guilds:', res.status);
-      return null;
-    }
-
-    guilds = await res.json();
-
-    // KVに5分間キャッシュ
-    await env.SESSIONS.put(cacheKey, JSON.stringify(guilds), {
-      expirationTtl: 300,
-    }).catch(() => {});
-  }
-
-  const guild = guilds.find(g => g.id === guildId);
-  if (!guild) {
-    console.log('[verifyGuildAccess] Guild not found. guildId:', guildId);
-    return null;
-  }
-
-  const hasPermission = (BigInt(guild.permissions) & BigInt(0x20)) === BigInt(0x20);
-  if (!hasPermission) {
-    console.log('[verifyGuildAccess] No MANAGE_GUILD permission');
-    return null;
-  }
-
-  return session;
+export function forbidden() {
+  return json({ error: "Forbidden" }, 403);
 }
