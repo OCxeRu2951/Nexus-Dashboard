@@ -8,9 +8,9 @@ import { fetchGuildChannels } from "./access.js";
 
 export const SNOWFLAKE = /^\d{15,25}$/;
 
-// 時報の画像・添付ファイルとして受け付けるホスト。
-// Bot 側の取得制限（events/ready.js）と同じ一覧にする。変えたら i18n の hourly.urlHint も直す
-export const ALLOWED_MEDIA_HOSTS = ["cdn.discordapp.com", "media.discordapp.net"];
+// 時報の添付ファイル（file_url）として受け付けるホスト。
+// Bot 側の取得制限（events/ready.js の HOURLY_FILE_HOSTS）と同じ一覧にする。変えたら i18n の hourly.urlHint も直す
+export const ALLOWED_FILE_HOSTS = ["cdn.discordapp.com", "media.discordapp.net"];
 const URL_MAX = 2048;
 
 /**
@@ -46,22 +46,35 @@ export function textOrNull(value, max) {
   return typeof value === "string" && value.length <= max ? value : undefined;
 }
 
+function parseUrl(value) {
+  if (typeof value !== "string" || value.length > URL_MAX) return null;
+  try {
+    const url = new URL(value);
+    return url.username || url.password ? null : url;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 空 → null / http・https の URL → 文字列 / 不正値 → undefined
+ * （画像・サムネイルは Bot が Discord に URL を渡すだけで、取得するのは Discord 側なのでホストは問わない）
+ */
+export function imageUrlOrNull(value) {
+  if (value == null || value === "") return null;
+  const url = parseUrl(value);
+  return url && (url.protocol === "https:" || url.protocol === "http:") ? value : undefined;
+}
+
 /**
  * 空 → null / 許可ホストの https URL → 文字列 / 不正値 → undefined
- * （Bot が URL を取得・表示するため、内部ネットワークなど任意の宛先を保存させない）
+ * （添付ファイルは Bot のサーバーが取得するため、内部ネットワークなど任意の宛先を保存させない）
  */
-export function mediaUrlOrNull(value) {
+export function fileUrlOrNull(value) {
   if (value == null || value === "") return null;
-  if (typeof value !== "string" || value.length > URL_MAX) return undefined;
-
-  let url;
-  try {
-    url = new URL(value);
-  } catch {
-    return undefined;
-  }
-  if (url.protocol !== "https:" || url.username || url.password || url.port) return undefined;
-  return ALLOWED_MEDIA_HOSTS.includes(url.hostname) ? value : undefined;
+  const url = parseUrl(value);
+  if (!url || url.protocol !== "https:" || url.port) return undefined;
+  return ALLOWED_FILE_HOSTS.includes(url.hostname) ? value : undefined;
 }
 
 /**

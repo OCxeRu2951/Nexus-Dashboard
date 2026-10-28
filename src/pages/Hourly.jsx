@@ -307,11 +307,10 @@ export default function Hourly() {
                   <input
                     type="text"
                     className="form-input"
-                    placeholder="https://cdn.discordapp.com/attachments/..."
+                    placeholder="https://example.com/image.png"
                     value={currentMsg?.image ?? ""}
                     onChange={(e) => updateCurrentMsg("image", e.target.value)}
                   />
-                  <p className="form-hint">{t("hourly.urlHint")}</p>
                 </div>
 
                 <div className="form-group">
@@ -398,11 +397,10 @@ export default function Hourly() {
                       <input
                         type="text"
                         className="form-input"
-                        placeholder="https://cdn.discordapp.com/attachments/..."
+                        placeholder="https://example.com/image.png"
                         value={currentMsg?.embed?.image ?? ""}
                         onChange={(e) => updateEmbed("image", e.target.value)}
                       />
-                      <p className="form-hint">{t("hourly.urlHint")}</p>
                     </div>
                   </div>
                 )}

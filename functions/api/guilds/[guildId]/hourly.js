@@ -5,7 +5,8 @@ import {
   readJsonBody,
   snowflakeOrNull,
   textOrNull,
-  mediaUrlOrNull,
+  imageUrlOrNull,
+  fileUrlOrNull,
   rejectForeignChannels,
 } from "../../_utils/validate.js";
 
@@ -58,8 +59,8 @@ function normalizeEmbed(embed) {
     color:       embed.color == null || embed.color === ""
       ? null
       : EMBED_COLOR.test(String(embed.color)) ? String(embed.color) : undefined,
-    image:       mediaUrlOrNull(embed.image),
-    thumbnail:   mediaUrlOrNull(embed.thumbnail),
+    image:       imageUrlOrNull(embed.image),
+    thumbnail:   imageUrlOrNull(embed.thumbnail),
   };
   if (Object.values(normalized).some((v) => v === undefined)) return undefined;
 
@@ -72,8 +73,8 @@ function normalizeMessage(msg) {
 
   const normalized = {
     content:  textOrNull(msg.content, CONTENT_MAX),
-    image:    mediaUrlOrNull(msg.image),
-    file_url: mediaUrlOrNull(msg.file_url),
+    image:    imageUrlOrNull(msg.image),
+    file_url: fileUrlOrNull(msg.file_url),
     embed:    normalizeEmbed(msg.embed),
   };
   return Object.values(normalized).some((v) => v === undefined) ? undefined : normalized;
